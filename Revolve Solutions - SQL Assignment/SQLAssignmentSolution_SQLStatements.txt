@@ -1,0 +1,45 @@
+Q: Which manufacturer's planes had the most number of flights? And how many flights?
+SELECT manufacturer, COUNT(*) AS flight_count
+FROM planes
+JOIN flights ON planes.tailnum = flights.tailnum
+GROUP BY manufacturer
+ORDER BY flight_count DESC
+LIMIT 1;
+
+Q: Which manufacturer's planes had the most number of flying hours? And how many hours?
+SELECT manufacturer, SUM(CAST(air_time AS INT)) AS total_flying_hours
+FROM planes
+JOIN flights ON planes.tailnum = flights.tailnum
+GROUP BY manufacturer
+ORDER BY total_flying_hours DESC
+LIMIT 1;
+
+Q: Which plane flew the most number of hours? And how many hours?
+SELECT tailnum, SUM(CAST(air_time AS INT)) AS total_flying_hours
+FROM flights
+GROUP BY tailnum
+ORDER BY total_flying_hours DESC
+LIMIT 1;
+
+Q: Which destination had the most delay in flights?
+SELECT dest, SUM(CAST(arr_delay AS INT)) AS total_delay
+FROM flights
+GROUP BY dest
+ORDER BY total_delay DESC
+LIMIT 1;
+
+Q: Which manufacturer's planes had covered the most distance? And how much distance?
+SELECT manufacturer, SUM(distance) AS total_distance
+FROM planes
+JOIN flights ON planes.tailnum = flights.tailnum
+GROUP BY manufacturer
+ORDER BY total_distance DESC
+LIMIT 1;
+
+Q: Which airport had the most flights on weekends?
+SELECT origin, COUNT(*) AS weekend_flight_count
+FROM flights
+WHERE strftime('%w', year || '-' || month || '-' || day) IN ('0', '6')
+GROUP BY origin
+ORDER BY weekend_flight_count DESC
+LIMIT 1;
